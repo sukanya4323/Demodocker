@@ -1,0 +1,47 @@
+services:
+  api_service:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql_db
+    links:
+      - mysql_db:app_db
+  mysql_db:
+    image: "mysql:8.0"
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: java_to_dev_app_db
+      MYSQL_USER: java_to_dev
+      MYSQL_PASSWORD: nE5kMc7JCGNqwDQM
+      MYSQL_ROOT_PASSWORD: nE5kMc7JCGNqwDQN
+version: '2'
+
+services:
+  app_service:
+    build: .
+    container_name: app
+    restart: always
+    ports:
+      - 8090:8090
+    depends_on:
+      - db    
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/Comany_DB
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+          
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=Comany_DB
+    ports:
+      - "5432:5432" 
+            

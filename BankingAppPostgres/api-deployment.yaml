@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: api
+  name: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: api
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: api
+    spec:
+      containers:
+        - env:
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: admin
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://PostgreSQL:5432/Comany_DB
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: update
+          image: bankingapptest.jar
+          name: API
+          ports:
+            - containerPort: 8085
+          resources: {}
+      restartPolicy: Always
+status: {}
